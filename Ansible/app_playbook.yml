@@ -1,0 +1,72 @@
+---
+- name: = = = Deploy and configure Flasck App on server. = = =
+  hosts: APP
+
+  tasks:
+    - name: = = = Install python3-pip = = =
+      apt:
+        name: python3-pip
+        state: present
+        update_cache: yes
+      become: yes
+
+    - name: = = = Install daemon = = =
+      apt:
+        name: daemon
+        state: present
+        update_cache: yes
+      become: yes
+
+    - name: = = = Delete git dir = = =
+      file:
+        path: "/home/ubuntu/flaskapp"
+        state: absent
+
+    - name: = = = Create src dir = = =
+      file:
+        path: /home/ubuntu/flaskapp/
+        state: directory
+
+    - name: = = = Clone from Git repository = = =
+      git:
+        repo: https://github.com/Gurpremm/rest-flask-nginx-People
+        dest: /home/ubuntu/flaskapp/
+        force: yes
+
+    - name: = = = Edit requirements.txt = = =
+      lineinfile:
+        path: /home/ubuntu/flaskapp/requirements.txt
+        regexp: '^Flask~>0.12.3'
+        line: 'Flask==1.1.4'
+
+    - name: = = = Edit people.py = = =
+      replace:
+        path: /home/ubuntu/flaskapp/people.py
+        regexp: 'm\-nginx\_db\_1'
+        replace: '{{ REDIS_IP }}'
+
+    - name: = = = Install from requirements.txt = = =
+      pip:
+        requirements: /home/ubuntu/flaskapp/requirements.txt
+
+    - name: = = = Delete trash files = = =
+      file:
+        path: "/home/ubuntu/flaskapp/{{ item }}"
+        state: absent
+      with_items:
+        - Dockerfile
+        - README.md
+        - docker-compose.yml
+
+    - name: = = = Delete trash directory = = =
+      file:
+        path: "/home/ubuntu/flaskapp/{{ item }}"
+        state: absent
+      with_items:
+        - conf.d
+        - .git
+
+    - name: = = = Run server.py = = =
+      shell:
+        cmd: daemon -- python3 server.py
+        chdir: /home/ubuntu/flaskapp/

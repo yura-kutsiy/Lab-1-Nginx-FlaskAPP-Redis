@@ -1,0 +1,26 @@
+---
+- name: = = = Install REDIS = = =
+  hosts: REDIS
+
+  tasks:
+    - name: = = = Install Redis = = =
+      apt:
+        name: redis-server
+        state: present
+        update_cache: yes
+      become: yes
+
+    - name: = = = Configure REDIS = = =
+      lineinfile:
+        path: /etc/redis/redis.conf
+        regexp: 'bind 127.0.0.1 ::1'
+        line: 'bind 127.0.0.1 {{ REDIS_IP }}'
+      become: yes
+
+    - name: = = = Ensure Redis ist started = = =
+      service:
+        name: redis
+        state: restarted
+        enabled: yes
+      become: yes
+

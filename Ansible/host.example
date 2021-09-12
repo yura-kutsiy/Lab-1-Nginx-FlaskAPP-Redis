@@ -1,0 +1,14 @@
+[NGINX]
+18.197.122.27
+
+[REDIS]
+3.65.40.184
+
+[APP]
+54.93.191.110
+
+[ALL:children]
+NGINX
+REDIS
+APP
+

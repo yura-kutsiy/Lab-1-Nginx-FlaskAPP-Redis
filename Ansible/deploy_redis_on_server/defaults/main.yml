@@ -1,0 +1,5 @@
+---
+# defaults file for deploy_redis_on_server
+- name: Install REDIS on server
+  hosts: REDIS
+  become: yes

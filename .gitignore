@@ -1,0 +1,6 @@
+Infrastructure/terraform.tfstate
+Infrastructure/terraform.tfstate.backup
+Infrastructure/.terraform
+Infrastructure/.terraform.lock.hcl
+rest-flask-nginx-People
+.git
