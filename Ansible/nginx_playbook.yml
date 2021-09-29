@@ -10,28 +10,15 @@
         update_cache: yes
       become: yes
 
-    - name: = = = Create flaskapp.conf = = =
-      copy:
+    - name: = = = Create flask config file for Nginx = = =
+      template:
+        src: ./template/nginx_conf.j2
         dest: /etc/nginx/conf.d/flaskapp.conf
-        content: |
-            server {
-                listen 80;
-                server_name {{ NGINX_IP }};
-
-                location / {
-                    proxy_set_header   Host                 $host;
-                    proxy_set_header   X-Real-IP            $remote_addr;
-                    proxy_set_header   X-Forwarded-For      $proxy_add_x_forwarded_for;
-                    proxy_set_header   X-Forwarded-Proto    $scheme;
-                    proxy_set_header Host $http_host;
-
-                    proxy_pass http://{{ APP_IP }}:5000;
-                }
-            }
       become: yes
 
-    - name: = = = Start Nginx = = =
+    - name: = = = Reload Nginx = = =
       service:
         name: nginx
-        state: started
+        state: reloaded
+      become: yes
 

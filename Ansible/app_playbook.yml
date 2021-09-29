@@ -67,6 +67,6 @@
         - .git
 
     - name: = = = Run server.py = = =
-      shell:
-        cmd: daemon -- python3 server.py
-        chdir: /home/ubuntu/flaskapp/
+      shell: nohup python3 /home/ubuntu/flaskapp/server.py &
+      args:
+        executable: /bin/bash

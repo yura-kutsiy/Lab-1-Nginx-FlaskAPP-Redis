@@ -14,16 +14,16 @@ variable "pair_key" {
 #---var-networking---
 
 #---var---security-group-nginx---
-# variable "ports_nginx" {
-#description = "Allow ports for Nginx security group"
-#   default = ["80", "22", "5000"]
-# }
-#---var---security-group-redis---
-# variable "ports_redis" {
-#description = "Allow ports for Redis security group"
-#   default = ["6379", "22"]
-# }
-#---var---default--
+variable "ports_nginx" {
+  description = "Allow ports for Nginx security group"
+  default     = ["80", "22", "5000"]
+}
+# # ---var---security-group-redis---
+variable "ports_redis" {
+  description = "Allow ports for Redis security group"
+  default     = ["6379", "22"]
+}
+#---var---default---
 variable "tags" {
   description = "Tags for all resources"
   type        = map(string)

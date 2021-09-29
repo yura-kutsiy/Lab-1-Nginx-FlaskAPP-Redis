@@ -20,7 +20,7 @@ resource "aws_instance" "nginx" {
   subnet_id                   = aws_subnet.public.id
   user_data                   = file("scripts/update.sh")
 
-  tags = merge(var.tags, { Name = "Nginx-server-${var.tags["Project"]}" })
+  tags = merge(var.tags, { Name = "${var.tags["Project"]}-Nginx-server" })
 }
 
 resource "aws_instance" "app" {
@@ -28,11 +28,11 @@ resource "aws_instance" "app" {
   instance_type               = var.instance_type
   associate_public_ip_address = true
   key_name                    = var.pair_key
-  security_groups             = [aws_security_group.nginx.id /*, aws_security_group.redis.id*/]
+  security_groups             = [aws_security_group.nginx.id, aws_security_group.redis.id]
   subnet_id                   = aws_subnet.public.id
   user_data                   = file("scripts/update.sh")
 
-  tags = merge(var.tags, { Name = "App-server-${var.tags["Project"]}" })
+  tags = merge(var.tags, { Name = "${var.tags["Project"]}-App-server" })
 }
 
 resource "aws_instance" "redis" {
@@ -40,11 +40,11 @@ resource "aws_instance" "redis" {
   instance_type               = var.instance_type
   associate_public_ip_address = true
   key_name                    = var.pair_key
-  security_groups             = [aws_security_group.nginx.id]
+  security_groups             = [aws_security_group.redis.id]
   subnet_id                   = aws_subnet.public.id
   user_data                   = file("scripts/update.sh")
 
-  tags = merge(var.tags, { Name = "Redis-server-${var.tags["Project"]}" })
+  tags = merge(var.tags, { Name = "${var.tags["Project"]}-Redis-server" })
 }
 
 #---------------------------------------------------
